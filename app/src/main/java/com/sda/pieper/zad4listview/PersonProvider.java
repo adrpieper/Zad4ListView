@@ -22,6 +22,12 @@ public class PersonProvider {
         janina.setSurname("Nowak");
         persons.add(jan);
         persons.add(janina);
+        for(int i = 0 ; i < 1000 ; i++) {
+            Person person = new Person();
+            person.setName("Jan" + i);
+            person.setSurname("Kowalski" + i);
+            persons.add(person);
+        }
 
         return persons;
     }
