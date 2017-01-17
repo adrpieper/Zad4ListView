@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Zad4ListView</string>
     <string name="personList">Lista osób</string>
+    <string name="name">Imię</string>
+    <string name="surname">Nazwisko</string>
+    <string name="add">Dodaj</string>
 </resources>
