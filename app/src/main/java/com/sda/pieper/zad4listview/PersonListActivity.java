@@ -48,8 +48,14 @@ public class PersonListActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            TextView textView = new TextView(PersonListActivity.this);
+        public View getView(int position, View oldView, ViewGroup viewGroup) {
+            TextView textView;
+            if (oldView != null) {
+                textView = (TextView) oldView;
+            }else {
+                textView = new TextView(PersonListActivity.this);
+            }
+
             Person person = persons.get(position);
             textView.setText(person.getName() + " " + person.getSurname());
             return textView;
