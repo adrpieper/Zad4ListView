@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +39,14 @@ public class PersonListActivity extends Activity {
                 nameEditText.setText("");
                 surnameEditText.setText("");
                 persons.add(person);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                persons.remove(position);
                 adapter.notifyDataSetChanged();
             }
         });
