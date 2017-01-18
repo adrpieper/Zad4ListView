@@ -35,6 +35,8 @@ public class PersonListActivity extends Activity {
                 Person person = new Person();
                 person.setName(nameEditText.getText().toString());
                 person.setSurname(surnameEditText.getText().toString());
+                nameEditText.setText("");
+                surnameEditText.setText("");
                 persons.add(person);
                 adapter.notifyDataSetChanged();
             }
