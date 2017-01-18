@@ -21,18 +21,25 @@ import java.util.List;
 
 public class PersonListActivity extends Activity {
 
+    private EditText nameEditText;
+    private ListView listView;
+    private EditText surnameEditText;
+    private Button addButton;
+    private List<Person> persons;
+    private PersonListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_list);
-        ListView listView = (ListView) findViewById(R.id.person_list);
-        final EditText nameEditText = (EditText) findViewById(R.id.name_edit_text);
-        final EditText surnameEditText = (EditText) findViewById(R.id.surname_edit_text);
-        Button addButton = (Button) findViewById(R.id.add_button);
+        listView = (ListView) findViewById(R.id.person_list);
+        nameEditText = (EditText) findViewById(R.id.name_edit_text);
+        surnameEditText = (EditText) findViewById(R.id.surname_edit_text);
+        addButton = (Button) findViewById(R.id.add_button);
 
         PersonProvider personProvider = new PersonProvider();
-        final List<Person> persons = personProvider.getPersons();
-        final PersonListAdapter adapter = new PersonListAdapter(persons);
+        persons = personProvider.getPersons();
+        adapter = new PersonListAdapter(persons);
         listView.setAdapter(adapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -60,26 +67,41 @@ public class PersonListActivity extends Activity {
         sortSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                Log.d("Switch", "checked " + checked);
-
-
-                Collections.sort(persons,new Comparator<Person>() {
-                    @Override
-                    public int compare(Person firstPerson, Person secondPerson) {
-                        int result = firstPerson.getSurname().compareTo(secondPerson.getSurname());
-
-                        if (result == 0) {
-                            return firstPerson.getName().compareTo(secondPerson.getName());
-                        }else{
-                            return result;
-                        }
-                    }
-                } );
-
-                adapter.notifyDataSetChanged();
+                sort(checked);
             }
         });
     }
+
+    private void sort(boolean order) {
+        Log.d("Switch", "checked " + order);
+
+        final Comparator<Person> comparator = new Comparator<Person>() {
+            @Override
+            public int compare(Person firstPerson, Person secondPerson) {
+                int result = firstPerson.getSurname().compareTo(secondPerson.getSurname());
+
+                if (result == 0) {
+                    return firstPerson.getName().compareTo(secondPerson.getName());
+                } else {
+                    return result;
+                }
+            }
+        };
+        if (order) {
+            Collections.sort(persons, comparator);
+        }else {
+            Comparator<Person> descComparator = new Comparator<Person>() {
+                @Override
+                public int compare(Person p1, Person p2) {
+                    return comparator.compare(p1,p2) * -1;
+                }
+            };
+            Collections.sort(persons, descComparator);
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
 
     class PersonListAdapter extends BaseAdapter {
         private List<Person> persons;
