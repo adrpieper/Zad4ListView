@@ -2,16 +2,21 @@ package com.sda.pieper.zad4listview;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class PersonListActivity extends Activity {
@@ -47,6 +52,30 @@ public class PersonListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 persons.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        Switch sortSwitch = (Switch) findViewById(R.id.sorting_order_switch);
+        sortSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                Log.d("Switch", "checked " + checked);
+
+
+                Collections.sort(persons,new Comparator<Person>() {
+                    @Override
+                    public int compare(Person firstPerson, Person secondPerson) {
+                        int result = firstPerson.getSurname().compareTo(secondPerson.getSurname());
+
+                        if (result == 0) {
+                            return firstPerson.getName().compareTo(secondPerson.getName());
+                        }else{
+                            return result;
+                        }
+                    }
+                } );
+
                 adapter.notifyDataSetChanged();
             }
         });
